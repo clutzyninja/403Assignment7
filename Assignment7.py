@@ -2,7 +2,7 @@
 # CMSC 403
 # Assignment 7
 # Brandon Binczak
-# 4/6/23
+# 4/20/23
 # *****************
 
 import random
@@ -46,11 +46,14 @@ class Rectangle:
 def pack(allRect, canvasSize):
     p = newPacker()
     p.add_bin(canvasSize[1], canvasSize[0])
+    final_pack = []
     for r in allRect:
-        p.add_rect(r[1], r[0])
+        p.add_rect(r.width, r.height)
     p.pack()
     packed_rects = p.rect_list()
-    return packed_rects
+    for rect in packed_rects:
+        final_pack.append(Rectangle(rect[4], rect[3], rect[1], rect[2]))
+    return final_pack
 
 
 def main():
@@ -62,7 +65,7 @@ def main():
         rectangles = []
         for line in file:
             height, width = map(int, line.strip().split(','))
-            rectangles.append((height, width))
+            rectangles.append(Rectangle(height, width))
 
     # Pack rectangles on canvas
     packed_rectangles = pack(rectangles, canvas_size)
@@ -70,8 +73,7 @@ def main():
     # Create custom canvas and draw rectangles
     custom_canvas = CustomCanvas(canvas_size[0], canvas_size[1])
     for rect in packed_rectangles:
-        rect_obj = Rectangle(rect[4], rect[3], rect[1], rect[2])
-        custom_canvas.draw_rectangle(rect_obj)
+        custom_canvas.draw_rectangle(rect)
 
     custom_canvas.run()
 
